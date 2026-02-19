@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  nginx: 
+    build: ./requirements/nginx
+    image: nginx
+    ports: 
+      - "443:443"
+    restart: always
+    networks:
+      - inseption_network
+  mariadb: 
+    build: ./requirements/mariadb
+    image: mariadb
+    restart: always
+    networks:
+      - inseption_network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+  wordpress: 
+    build: ./requirements/wordpress
+    image: wordpress
+    restart: always
+    networks:
+      - inseption_network
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - wordpress_data:/var/www/html
+
+volumes:
+  mariadb_data:
+    driver: local
+  wordpress_data:
+    driver: local
+
+networks:
+  inseption_network:
+    driver: bridge 
