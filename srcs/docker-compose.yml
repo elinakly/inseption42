@@ -1,14 +1,16 @@
 version: "3.9"
+
 services:
-  nginx: 
+  nginx:
     build: ./requirements/nginx
     image: nginx
-    ports: 
+    ports:
       - "443:443"
     restart: always
     networks:
       - inseption_network
-  mariadb: 
+
+  mariadb:
     build: ./requirements/mariadb
     image: mariadb
     restart: always
@@ -16,7 +18,8 @@ services:
       - inseption_network
     volumes:
       - mariadb_data:/var/lib/mysql
-  wordpress: 
+
+  wordpress:
     build: ./requirements/wordpress
     image: wordpress
     restart: always
@@ -33,9 +36,18 @@ services:
 volumes:
   mariadb_data:
     driver: local
+    driver_opts:
+      type: none
+      device: /home/eklymova/data/mariadb
+      o: "mkdir"
+
   wordpress_data:
     driver: local
+    driver_opts:
+      type: none
+      device: /home/eklymova/data/wordpress
+      o: "mkdir"
 
 networks:
   inseption_network:
-    driver: bridge 
+    driver: bridge
