@@ -1,12 +1,15 @@
 FROM debian:12.2
 
-# Install PHP and dependencies
+# Install MariaDB server
 RUN apt-get update && apt-get install -y \
     mariadb-server \
     && rm -rf /var/lib/apt/lists/*
 
+COPY ./tools/init_db.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/init_db.sh
+ENTRYPOINT ["/usr/local/bin/init_db.sh"]
 
 EXPOSE 3306
 
-# Run PHP-FPM as main process
+# Run MariaDB server as main process
 CMD ["mysqld"]

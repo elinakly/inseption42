@@ -1,8 +1,6 @@
-version: "3.9"
-
 services:
   nginx:
-    build: ./requirements/nginx
+    build: ./req/nginx
     image: nginx
     ports:
       - "443:443"
@@ -11,16 +9,19 @@ services:
       - inseption_network
 
   mariadb:
-    build: ./requirements/mariadb
+    build: ./req/mariadb
     image: mariadb
     restart: always
     networks:
       - inseption_network
     volumes:
       - mariadb_data:/var/lib/mysql
+    secrets:
+      - db_root_password
+      - db_password
 
   wordpress:
-    build: ./requirements/wordpress
+    build: ./req/wordpress
     image: wordpress
     restart: always
     networks:
@@ -29,9 +30,20 @@ services:
       WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
       WORDPRESS_DB_USER: ${MYSQL_USER}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
     volumes:
       - wordpress_data:/var/www/html
+    secrets:
+      - db_password
+      - credentials
+
+secrets:
+  credentials:
+    file: ./secrets/credentials.txt
+  db_password:
+    file: ./secrets/db_password.txt
+  db_root_password:
+    file: ./secrets/db_root_password.txt
 
 volumes:
   mariadb_data:
