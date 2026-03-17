@@ -8,11 +8,18 @@ RUN apt-get update && apt-get install -y \
     openssl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy conf nginx
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+# create ssl directory
+RUN mkdir -p /etc/nginx/ssl
 
-# COpy sertificate TLS
-COPY conf/ssl /etc/ssl
+# generate self-signed certificate
+RUN openssl req -x509 -nodes -days 365 \
+-newkey rsa:2048 \
+-keyout /etc/nginx/ssl/tls.key \
+-out /etc/nginx/ssl/tls.crt \
+-subj "/C=NL/ST=Holland/L=Amsterdam/O=42/OU=student/CN=eklymova.42.fr"
+
+# copy nginx config
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 # open port 443 for HTTPS
 EXPOSE 443
