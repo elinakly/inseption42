@@ -1,15 +1,24 @@
 SRC=srcs
-DATA_PATH = /home/eklymova/data
+DATA_PATH ?= $(HOME)/data
+DOCKER_COMPOSE := $(shell if docker compose version >/dev/null 2>&1; then echo "docker compose"; elif command -v docker-compose >/dev/null 2>&1; then echo "docker-compose"; fi)
+
 all: up
 
-build:
-	docker-compose -f $(SRC)/docker-compose.yml build
+check_compose:
+	@if [ -z "$(DOCKER_COMPOSE)" ]; then \
+		echo "Error: Docker Compose is not available."; \
+		echo "Start Docker Desktop with WSL integration enabled, or install Docker Engine + Compose in this distro."; \
+		exit 1; \
+	fi
+
+build: check_compose
+	$(DOCKER_COMPOSE) -f $(SRC)/docker-compose.yml build
 
 up: create_dirs build
-	docker-compose -f $(SRC)/docker-compose.yml up -d
+	$(DOCKER_COMPOSE) -f $(SRC)/docker-compose.yml up -d
 
-down:
-	docker-compose -f $(SRC)/docker-compose.yml down
+down: check_compose
+	$(DOCKER_COMPOSE) -f $(SRC)/docker-compose.yml down
 
 create_dirs:
 	mkdir -p $(DATA_PATH)/mariadb
@@ -17,4 +26,4 @@ create_dirs:
 
 re: down all
 
-.PHONY: all build up down re create_dirs
+.PHONY: all check_compose build up down re create_dirs

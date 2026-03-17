@@ -50,15 +50,15 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/eklymova/data/mariadb
-      o: "mkdir"
+      device: ${HOME}/data/mariadb
+      o: bind
 
   wordpress_data:
     driver: local
     driver_opts:
       type: none
-      device: /home/eklymova/data/wordpress
-      o: "mkdir"
+      device: ${HOME}/data/wordpress
+      o: bind
 
 networks:
   inseption_network:
