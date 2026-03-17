@@ -10,11 +10,15 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
+# RUN wget -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+#     && chmod +x /usr/local/bin/wp
+
 # Download and extract WordPress
 RUN wget https://wordpress.org/wordpress-6.5.2.tar.gz \
     && tar -xzf wordpress-6.5.2.tar.gz --strip-components=1 \
     && rm wordpress-6.5.2.tar.gz
 
+COPY ./conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
 COPY ./tools/setup_wp.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/setup_wp.sh

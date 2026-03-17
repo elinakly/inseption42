@@ -7,6 +7,8 @@ services:
     restart: always
     networks:
       - inseption_network
+    volumes:
+      - wordpress_data:/var/www/html
 
   mariadb:
     build: ./req/mariadb
@@ -14,6 +16,9 @@ services:
     restart: always
     networks:
       - inseption_network
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
     volumes:
       - mariadb_data:/var/lib/mysql
     secrets:
@@ -27,6 +32,7 @@ services:
     networks:
       - inseption_network
     environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
       WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
       WORDPRESS_DB_USER: ${MYSQL_USER}
