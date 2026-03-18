@@ -33,23 +33,30 @@ services:
       - inseption_network
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
-      WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
-      WORDPRESS_DB_USER: ${MYSQL_USER}
-      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+      WP_DB_HOST: mariadb
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      WP_ADMIN_USER: ${WP_ADMIN_USER}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+      WP_USER: ${WP_USER}
+      WP_USER_EMAIL: ${WP_USER_EMAIL}
     volumes:
       - wordpress_data:/var/www/html
     secrets:
       - db_password
-      - credentials
+      - wp_user_password
+      - wp_admin_password
 
 secrets:
-  credentials:
-    file: ./secrets/credentials.txt
+  wp_user_password:
+    file: ./secrets/wp_user_password.txt
+  wp_admin_password:
+    file: ./secrets/wp_admin_password.txt
   db_password:
     file: ./secrets/db_password.txt
   db_root_password:
     file: ./secrets/db_root_password.txt
+  
 
 volumes:
   mariadb_data:

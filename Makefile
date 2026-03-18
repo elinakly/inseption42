@@ -18,17 +18,11 @@ up: create_dirs build
 	$(DOCKER_COMPOSE) -f $(SRC)/docker-compose.yml up -d
 
 down: check_compose
-	$(DOCKER_COMPOSE) -f $(SRC)/docker-compose.yml down
+	$(DOCKER_COMPOSE) -f $(SRC)/docker-compose.yml down --volumes --remove-orphans
 
 create_dirs:
 	mkdir -p $(DATA_PATH)/mariadb
 	mkdir -p $(DATA_PATH)/wordpress
-
-up: create_dirs build
-	docker-compose -f $(SRC)/docker-compose.yml up -d
-
-down:
-	docker-compose -f $(SRC)/docker-compose.yml down --volumes --remove-orphans
 
 re: down all
 
