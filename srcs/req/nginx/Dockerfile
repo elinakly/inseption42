@@ -14,7 +14,7 @@ RUN mkdir -p /etc/nginx/ssl
 RUN openssl req -newkey rsa:4096 -x509 -sha256 -nodes \
 	-out /etc/nginx/ssl/tls_certificate.crt \
 	-keyout /etc/nginx/ssl/tls_certificate.key \
-	-subj "/C=NL/ST=NH/L=Amsterdam/O=42/OU=CODAM/CN=localhost" \
+	-subj "/C=NL/ST=NH/L=Amsterdam/O=42/OU=CODAM/CN=eklymova.42.fr" \
 	-addext "subjectAltName=DNS:localhost,IP:127.0.0.1,DNS:eklymova.42.fr" \
 	-addext "keyUsage=digitalSignature,keyEncipherment" \
 	-addext "extendedKeyUsage=serverAuth"
