@@ -11,16 +11,14 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /etc/nginx/ssl
 
 # Generate a self-signed TLS certificate
-RUN openssl req -x509 -nodes -days 365 \
--newkey rsa:2048 \
--keyout /etc/nginx/ssl/tls.key \
--out /etc/nginx/ssl/tls.crt \
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -nodes \
+	-out /etc/nginx/ssl/tls_certificate.crt \
+	-keyout /etc/nginx/ssl/tls_certificate.key \
+	-subj "/C=NL/ST=NH/L=Amsterdam/O=42/OU=CODAM/CN=localhost" \
+	-addext "subjectAltName=DNS:localhost,IP:127.0.0.1,DNS:eklymova.42.fr" \
+	-addext "keyUsage=digitalSignature,keyEncipherment" \
+	-addext "extendedKeyUsage=serverAuth"
 
-####LEARN
--subj "/C=NL/ST=Holland/L=Amsterdam/O=42/OU=student/CN=eklymova.42.fr" \
--addext "subjectAltName=DNS:eklymova.42.fr" \
--addext "keyUsage=digitalSignature,keyEncipherment" \
--addext "extendedKeyUsage=serverAuth"
 
 # Copy NGINX configuration
 COPY conf/nginx.conf /etc/nginx/nginx.conf

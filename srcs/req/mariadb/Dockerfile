@@ -13,6 +13,3 @@ RUN chmod +x /usr/local/bin/init_db.sh
 ENTRYPOINT ["/usr/local/bin/init_db.sh"]
 
 EXPOSE 3306
-
-# Run MariaDB server as main process
-CMD ["mysqld", "--user=mysql"]
