@@ -24,7 +24,7 @@ fi
 
 # Initialize DB and app user
 mysql "${MYSQL_AUTH[@]}" <<-EOSQL
-CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\` ;
 CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
 ALTER USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
 GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
@@ -44,4 +44,4 @@ mysqladmin -uroot -p"$ROOT_PASSWORD" shutdown
 wait "$PID"
 
 # Start MariaDB as PID 1
-exec mysqld --user=mysql --bind-address=0.0.0.0
+exec mysqld --user=mysql
