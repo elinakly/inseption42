@@ -16,6 +16,12 @@ WP_USER_PASSWORD="$(cat /run/secrets/wp_user_password)"
 
 cd /var/www/html
 
+# If /var/www/html is a fresh volume, seed it with bundled WordPress files.
+if [ ! -f /var/www/html/index.php ]; then
+  cp -a /usr/src/wordpress/. /var/www/html/
+  chown -R www-data:www-data /var/www/html
+fi
+
 # Wait for database to be ready
 until mysqladmin ping -h"$WP_DB_HOST" -u"$MYSQL_USER" -p"$DB_PASSWORD" --silent; do
   echo "Waiting for database..."
@@ -37,7 +43,7 @@ fi
 if ! wp core is-installed --allow-root; then
   echo "Installing WordPress..."
   wp core install \
-      --url="$DOMAIN_NAME" \
+  --url="https://$DOMAIN_NAME" \
       --title="Inception" \
       --admin_user="$WP_ADMIN_USER" \
       --admin_password="$WP_ADMIN_PASSWORD" \
@@ -45,6 +51,10 @@ if ! wp core is-installed --allow-root; then
       --skip-email \
       --allow-root
 fi
+
+# Ensure admin and frontend assets are always generated with HTTPS URLs.
+wp option update home "https://$DOMAIN_NAME" --allow-root >/dev/null
+wp option update siteurl "https://$DOMAIN_NAME" --allow-root >/dev/null
 
 # Create additional user if missing
 if ! wp user get "$WP_USER" --allow-root >/dev/null 2>&1; then

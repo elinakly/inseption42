@@ -19,7 +19,9 @@ RUN wget -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh
 RUN wget https://wordpress.org/wordpress-6.5.2.tar.gz \
     && tar -xzf wordpress-6.5.2.tar.gz --strip-components=1 \
     && rm wordpress-6.5.2.tar.gz \
-    && chown -R www-data:www-data /var/www/html 
+    && mkdir -p /usr/src/wordpress \
+    && cp -a /var/www/html/. /usr/src/wordpress/ \
+    && chown -R www-data:www-data /var/www/html /usr/src/wordpress
 
 COPY ./conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 

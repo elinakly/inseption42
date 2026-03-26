@@ -22,6 +22,11 @@ This project also emphasizes best practices in security, modular design, and aut
 git clone <repo_url>
 cd inception42
 ```
+2. Create env file for Compose:
+```bash
+cp srcs/.env.example srcs/.env
+```
+3. Adjust values in `srcs/.env` if needed.
 Build and start containers using Make:
 ```bash
 make

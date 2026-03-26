@@ -8,7 +8,7 @@ services:
     networks:
       - inseption_network
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/var/www/html:ro
 
   mariadb:
     build: ./req/mariadb
