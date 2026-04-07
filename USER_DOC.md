@@ -35,8 +35,8 @@ make re
 1. Stops, rebuilds, and restarts all services.
 
 ### Accessing Services
-Website: open http://eklymova.42.fr in a browser
-WordPress Admin: http://eklymova.42.fr/wp-admin
+Website: open https://eklymova.42.fr in a browser
+WordPress Admin: https://eklymova.42.fr/wp-admin
 #### Credentials
 Database passwords are stored in Docker secrets:
 - /run/secrets/db_root_password
